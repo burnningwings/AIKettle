@@ -1,0 +1,1012 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智能热水器</title>
+    <link href="{% static 'plugins/bootstrap-4.3.1-dist/css/bootstrap.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/loading.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'plugins/jquery-3.4.1/jquery-3.4.1.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap-4.3.1-dist/js/bootstrap.js' %}"></script>
+    <script src="{% static 'plugins/echarts/echarts.min.js' %}"></script>
+    <script src="{% static 'plugins/echarts/echarts-gl.min.js' %}"></script>
+
+    <style>
+        .jud {
+            position: relative;
+            height: 200px;
+            width: 100px;
+            border: gray solid 1px;
+        }
+
+        .water {
+            position: absolute;
+            background: lightskyblue;
+            height: 2px;
+            width: 99px;
+            bottom: 0;
+        }
+
+        .card {
+            min-height: 444px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav class="navbar navbar-light bg-light justify-content-center">
+        <a class="nav-link active" href="#">嵌入式技术课程设计-----智能电热水壶</a>
+    </nav>
+
+    <div class="jumbotron pt-md-5 pb-md-5 mt-3">
+        <h1 class="display-6">智能电热水壶</h1>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">控制组</h5>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label mr-2"><span
+                                    class="badge badge-info bt-1">电源</span></label>
+                            <div class="col-md-4 ml-4">
+                                <button href="#" class="btn btn-success" id="power-btn">开启</button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label mr-2"><span
+                                    class="badge badge-info bt-1">烧水</span></label>
+                            <div class="col-md-4 ml-4">
+                                <button href="#" class="btn btn-success on-btn" id="heat-btn" disabled>启动</button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label mr-2"><span
+                                    class="badge badge-info bt-1">注水</span></label>
+                            <div class="col-md-4 ml-4">
+                                <button href="#" class="btn btn-success on-btn" id="add-water-btn" disabled>启动</button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label mr-2"><span
+                                    class="badge badge-info bt-1">用水</span></label>
+                            <div class="col-md-4 ml-4">
+                                <button href="#" class="btn btn-success on-btn" id="reduce-water-btn" disabled>启动
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="loading mt-md-4"></div>
+
+                        {% comment %}<a href="#" class="btn btn-primary" id="add-water">自动注水</a>
+                        <div>
+                            自动注水
+                            <label class="toggle toggle-positive">
+                                <input type="checkbox" checked="">
+                                <div class="track">
+                                    <div class="handle"></div>
+                                </div>
+                            </label>
+                        </div>{% endcomment %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">水壶</h5>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="jud">
+                                    <div class="water">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="form-group row">
+                                    <label class="col-md-6 col-form-label mr-2"><span
+                                            class="badge badge-info bt-1">电源灯</span></label>
+
+                                    <div class="col-md-4">
+                                        <svg class="bd-placeholder-img rounded-circle" width="40" height="40"
+                                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
+                                             focusable="false" role="img" aria-label="Placeholder: 140x140"><title>
+                                            Placeholder</title>
+                                            <rect fill="#777" width="100%" height="100%" id="power-light"></rect>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-6 col-form-label mr-2"><span
+                                            class="badge badge-info bt-1">状态指示灯</span></label>
+
+                                    <div class="col-md-4">
+                                        <svg class="bd-placeholder-img rounded-circle" width="40" height="40"
+                                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
+                                             focusable="false" role="img" aria-label="Placeholder: 140x140"><title>
+                                            Placeholder</title>
+                                            <rect fill="#777" width="100%" height="100%" id="light"></rect>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-6 col-form-label mr-2"><span
+                                            class="badge badge-info bt-1">用水</span></label>
+                                    <div class="col-md-4">
+                                        <svg class="bd-placeholder-img rounded-circle" width="40" height="40"
+                                             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
+                                             focusable="false" role="img" aria-label="Placeholder: 140x140">
+                                            <title>Placeholder</title>
+                                            <rect fill="#777" width="100%" height="100%" id="auto-water"></rect>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label mr-2"><span
+                                            class="badge badge-info bt-1">温度</span></label>
+                                    <div class="col-md-7">
+                                        <input type="text" readonly
+                                               class="form-control-plaintext pl-2 pr-2"
+                                               id="tempe"
+                                               value="--">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label mr-2"><span
+                                            class="badge badge-info bt-1">水位</span></label>
+                                    <div class="col-md-7">
+                                        <input type="text" readonly
+                                               class="form-control-plaintext pl-2 pr-2"
+                                               value="--" id="cur-water">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label mr-2"><span
+                                            class="badge badge-info bt-1">用水量</span></label>
+                                    <div class="col-md-7">
+                                        <input type="text" readonly
+                                               class="form-control-plaintext pl-2 pr-2"
+                                               value="--" id="reduce-water">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">日志</h5>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <textarea class="form-control" id="message" rows="14" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">监控</h5>
+                        <div class="form-group row">
+                            <div class="col-md-12" id="mychart" style="height: 400px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let myVal;  // 定时任务
+    let val_time = 500; // 定时任务间隔时间
+    let water_size = 60;    // 水壶加水容量
+    let cur_ajax = null;        // 异步请求服务, 用来取消
+    let power_status = false;   // 电源状态
+    let power_flag = false; // 是否执行电源操作标志位
+    let flag = 0;               // 定时任务信号量
+    let add_water_status = false;   // 加水标志
+    let add_water_flag = false;     // 加水操作标志位
+    let reduce_water_flag = false;  // 是否用水操作标志位
+    let reduce_water_status = false;    // 用水标志
+    let reduce_water = 0;       // 用水量
+    let heat_flag = false;      // 是否执行加热操作执行标志位
+    let heat_status = false;    // 加热标志
+
+    // 页面加载后启动定时任务
+    $(function () {
+        cur_ajax = $.ajax({
+            url: '{% url 'hot:get_info' %}',
+            type: 'GET',
+            dataType: "json",   //预期服务器返回的数据类型
+            data: '',
+            processData: false,
+            content_type: false,
+
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+
+            success: function (data) {
+                if (data['status'] == 'success') {
+                    myVal = setInterval('time_task()', val_time);
+                    let t = parseInt(data['t']);
+                    let w = parseInt(data['w']);
+
+                    // 电源状态
+                    if (data['power'] === '1') {
+                        power_status = true;
+                        $(".on-btn").removeAttr("disabled");
+
+                        $("#power-light").attr({
+                            'fill': '#edfc08'
+                        });
+
+                        $("#power-btn").text("关闭");
+                        $("#power-btn").removeClass("btn-success");
+                        $("#power-btn").addClass("btn-danger");
+
+                        if (data['work'] == "water") {
+                            // 注水中
+                            $("#add-water-btn").removeClass("btn-success");
+                            $("#add-water-btn").addClass("btn-secondary");
+                            $("#add-water-btn").text("关闭");
+                            add_water_status = true;
+
+                            // 状态指示灯
+                            $("#light").attr({
+                                "fill": "#007bff"
+                            });
+                        } else if (data['work'] == "heat") {
+                            if (heat_status == false) {
+                                $("#heat-btn").removeClass("btn-success");
+                                $("#heat-btn").addClass("btn-secondary");
+                                $("#heat-btn").text("关闭");
+                                heat_status = true;
+
+                                $("#add-water-btn").addClass("btn-success");
+                                $("#add-water-btn").removeClass("btn-secondary");
+                                $("#add-water-btn").text("启动");
+                                add_water_status = false;
+                                // 状态指示灯
+                            }
+                            $("#light").attr({
+                                "fill": "#ff0000"
+                            });
+                        } else if (data['work'] == "end") {
+                            $("#heat-btn").addClass("btn-success");
+                            $("#heat-btn").removeClass("btn-secondary");
+                            $("#heat-btn").text("启动");
+                            // 状态指示灯
+                            heat_status = false;
+                            $("#light").attr({
+                                "fill": "#28a745"
+                            });
+                        } else {
+                            $("#heat-btn").addClass("btn-success");
+                            $("#heat-btn").removeClass("btn-secondary");
+                            $("#heat-btn").text("启动");
+                            // 状态指示灯
+                            heat_status = false;
+                            $("#light").attr({
+                                "fill": "#777"
+                            });
+                        }
+
+
+                        if (isNaN(t) || isNaN(w)) {
+                            alert_log("传感器出错了")
+                            return;
+                        }
+
+                        // 温度和水量指示
+                        $("#tempe").val(t);
+                        $("#cur-water").val(w);
+
+                        // 水烧开了
+                        if (t >= 100) {
+                            // 水烧开之后, 水颜色变红, 指示灯变绿, 电源开关恢复
+                            $(".water").css({
+                                'background': 'red'
+                            });
+                        } else {
+                            $(".water").css({
+                                'background': 'lightskyblue'
+                            });
+                        }
+
+                        $(".water").css({"height": w * 3 + "px"});
+                    }
+                } else if (data['status'] == 'error') {
+                    alert_log("获取信息失败, 与硬件失去连接")
+                } else if (data['status'] == 'nothing') {
+                    console.log('没有数据');
+                    $("#cur-water").val("--");
+                    $("#tempe").val("--");
+                    $("#reduce-water").val("--");
+                    $("rect").attr({
+                        "fill": '#777'
+                    });
+                }
+            },
+
+            error: function () {
+                console.log('服务器开小差了');
+            },
+
+            complete: function () {
+                myVal = setInterval('time_task()', 1000);
+            }
+        });
+    })
+
+
+    // 电源按钮点击事件
+    $("#power-btn").click(function () {
+        if ($('.loading-column').length == 0) {
+            addLoaingIcon($(".loading"));
+        }
+
+        power_flag = true;
+        if (power_status === false) {
+            power_status = true;
+        } else {
+            power_status = false;
+
+            if (heat_status == true) {
+                $("#heat-btn").trigger("click");
+            }
+
+            if (add_water_status == true) {
+                $("#add-water-btn").trigger("click");
+            }
+            if (reduce_water_status == true) {
+                $("#reduce-water-btn").trigger("click");
+            }
+        }
+    })
+
+    // 加热按钮点击事件
+    $("#heat-btn").click(function () {
+        if (add_water_status === true && heat_status === false) {
+            alert_log("请先停止注水");
+            return;
+        }
+        if (parseInt($("#cur-water").val()) <= 10 && parseInt($("#tempe").val()) < 100) {
+            alert_log("水量不够, 可能会烧坏电器, 将自动加水后开始");
+            add_water_status = true;
+            add_water_flag = true;
+        }
+        if (reduce_water_status == true) {
+            alert_log("请先停止用水");
+            return;
+        }
+        if ($('.loading-column').length == 0) {
+            addLoaingIcon($(".loading"));
+        }
+        heat_flag = true;
+        if (heat_status === false) {
+            heat_status = true;
+        } else {
+            heat_status = false;
+        }
+    })
+
+    // 加水按钮点击事件
+    $("#add-water-btn").click(function () {
+        if (add_water_status == false && heat_status == true) {
+            alert_log("请先停止加热");
+            return;
+        }
+        if (reduce_water_status == true) {
+            alert_log("请先停止用水")
+            return;
+        }
+
+        if (add_water_status === false) {
+            if ($("#cur-water").val() >= water_size) {
+                alert_log("水已经满了")
+                return;
+            }
+            add_water_status = true;
+        } else {
+
+            add_water_status = false;
+        }
+        add_water_flag = true;
+
+    })
+
+    // 用水按钮点击事件
+    $("#reduce-water-btn").click(function () {
+        if (heat_status == true) {
+            alert_log("请先停止加热");
+            return;
+        }
+        if (add_water_status == true) {
+            alert_log("请先停止加水")
+            return;
+        }
+
+        if ($('.loading-column').length == 0) {
+            addLoaingIcon($(".loading"));
+        }
+
+        if (reduce_water_status === false) {
+            reduce_water_status = true;
+            reduce_water_flag = true;
+            $("#auto-water").attr({
+                "fill": "#28a745"
+            });
+        } else {
+            reduce_water_status = false;
+            reduce_water_flag = true;
+            $("#auto-water").attr({
+                "fill": "#777"
+            });
+        }
+
+    })
+
+    // 获取信息
+    function get_info() {
+        cur_ajax = $.ajax({
+            url: '{% url 'hot:get_info' %}',
+            type: 'GET',
+            dataType: "json",   //预期服务器返回的数据类型
+            data: '',
+            processData: false,
+            content_type: false,
+
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+
+            success: function (data) {
+                if (data['status'] == 'success') {
+                    let t = parseInt(data['t']);
+                    let w = parseInt(data['w']);
+
+                    // 电源状态
+                    if (data['power'] === '1') {
+
+                        $("#power-light").attr({
+                            'fill': '#edfc08'
+                        });
+
+                        if (isNaN(t) || isNaN(w)) {
+                            alert_log("传感器出错了")
+                            return;
+                        }
+
+                        if (data['work'] == "water") {
+                            // 注水中
+                            $("#add-water-btn").removeClass("btn-success");
+                            $("#add-water-btn").addClass("btn-secondary");
+                            $("#add-water-btn").text("关闭");
+                            //if (add_water_status == false) {
+                            //    add_water_status = true;
+                            //}
+                            // 状态指示灯
+                            $("#light").attr({
+                                "fill": "#007bff"
+                            });
+                        } else if (data['work'] == "heat") {
+                            //if (heat_status == false) {
+                            //    heat_status = true;
+                            //}
+                            $("#heat-btn").removeClass("btn-success");
+                            $("#heat-btn").addClass("btn-secondary");
+                            $("#heat-btn").text("关闭");
+                            // 状态指示灯
+                            $("#light").attr({
+                                "fill": "#ff0000"
+                            });
+                        } else if (data['work'] == "end") {
+                            $("#heat-btn").addClass("btn-success");
+                            $("#heat-btn").removeClass("btn-secondary");
+                            $("#heat-btn").text("启动");
+                            // 状态指示灯
+                            heat_status = false;
+                            $("#light").attr({
+                                "fill": "#28a745"
+                            });
+                        } else {
+                            $("#heat-btn").addClass("btn-success");
+                            $("#heat-btn").removeClass("btn-secondary");
+                            $("#heat-btn").text("启动");
+                            // 状态指示灯
+                            //heat_status = false;
+                            $("#light").attr({
+                                "fill": "#777"
+                            });
+                        }
+
+                        // 温度和水量指示
+                        $("#tempe").val(t);
+                        $("#cur-water").val(w);
+
+                        // 水烧开了
+                        if (t >= 100) {
+                            // 水烧开之后, 水颜色变红, 指示灯变绿, 电源开关恢复
+                            $(".water").css({
+                                'background': 'red'
+                            });
+                        } else {
+                            $(".water").css({
+                                'background': 'lightskyblue'
+                            });
+                        }
+                        if (w >= water_size) {
+                            // 水加满了自动停止加水
+                            $("#add-water-btn").addClass("btn-success");
+                            $("#add-water-btn").removeClass("btn-secondary");
+                            $("#add-water-btn").text("启动");
+
+                            add_water_status = false;
+                        }
+
+                        {#$(".water").css({"height": w * 3 + "px"});#}
+                        $(".water").animate({
+                            height: w * 3 + "px"
+                        });
+
+                        // 设置折线图表
+                        set_chart(t, w);
+                    }
+
+                } else if (data['status'] == 'error') {
+                    alert_log("获取信息失败, 与硬件连接失败");
+                } else if (data['status'] == 'nothing') {
+                    alert_log('与硬件连接失败, 没有数据, 请重启硬件');
+                    $("#cur-water").val("--");
+                    $("#tempe").val("--");
+                    $("#reduce-water").val("--");
+                    $("rect").attr({
+                        "fill": '#777'
+                    });
+                }
+            },
+
+            error: function () {
+                console.log('服务器开小差了');
+            },
+
+            complete: function () {
+                flag = 0;
+            }
+        });
+    }
+
+    // 定时任务
+    function time_task() {
+        if (flag == 0) {
+            flag = 1;
+
+            // 负责自动添加水
+            if (add_water_flag === true) {
+                $.ajax({
+                    url: '{% url 'hot:add_water' %}',
+                    type: 'GET',
+                    dataType: "text",//预期服务器返回的数据类型
+                    data: {
+                        "add_water_status": add_water_status
+                    },
+                    processData: true,
+                    content_type: false,
+
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+
+                    success: function (data) {
+                        console.log(data);
+                        if (data == 'on') {
+                            $("#add-water-btn").removeClass("btn-success");
+                            $("#add-water-btn").addClass("btn-secondary");
+                            $("#add-water-btn").text("关闭");
+                        } else if (data == "off") {
+                            $("#add-water-btn").addClass("btn-success");
+                            $("#add-water-btn").removeClass("btn-secondary");
+                            $("#add-water-btn").text("启动");
+                        } else {
+                            $("#add-water-btn").addClass("btn-success");
+                            $("#add-water-btn").removeClass("btn-secondary");
+                            $("#add-water-btn").text("启动");
+                            add_water_status = false;
+                            alert_log("启动失败, 与硬件失去联系");
+                        }
+                    },
+
+                    error: function () {
+                        $("#add-water-btn").addClass("btn-success");
+                        $("#add-water-btn").removeClass("btn-secondary");
+                        $("#add-water-btn").text("启动");
+                        add_water_status = false;
+                        alert_log("注水失败, 服务器错误")
+                    },
+                    complete: function () {
+                        flag = 0;
+                        add_water_flag = false;
+                        $(".loading-column").remove();
+                    }
+                });
+                return;
+            }
+
+            // 负责烧水加热
+            if (heat_flag === true) {
+                if (parseInt($("#tempe").val()) >= 100) {
+                    alert_log("水已经烧开了");
+                    $(".loading-column").remove();
+                    flag = 0;
+                    {#heat_status = false;#}
+                    heat_flag = false;
+                    return;
+                }
+                $.ajax({
+                    url: '{% url 'hot:heat' %}',
+                    type: 'GET',
+                    dataType: "text",//预期服务器返回的数据类型
+                    data: {
+                        "heat_status": heat_status
+                    },
+                    processData: true,
+                    content_type: false,
+
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+
+                    success: function (data) {
+                        if (data == 'on') {
+                            $("#heat-btn").removeClass("btn-success");
+                            $("#heat-btn").addClass("btn-secondary");
+                            $("#heat-btn").text("关闭");
+                        } else if (data == 'off') {
+                            $("#heat-btn").addClass("btn-success");
+                            $("#heat-btn").removeClass("btn-secondary");
+                            $("#heat-btn").text("启动");
+                        } else {
+                            heat_status = false;
+                            $("#heat-btn").addClass("btn-success");
+                            $("#heat-btn").removeClass("btn-secondary");
+                            $("#heat-btn").text("启动");
+                            alert_log("启动失败, 与硬件失去联系")
+                        }
+                        console.log(data);
+                    },
+
+                    error: function () {
+                        heat_status = false;
+                        $("#heat-btn").addClass("btn-success");
+                        $("#heat-btn").removeClass("btn-secondary");
+                        $("#heat-btn").text("启动");
+                        alert_log("加热失败, 与服务器失去联系");
+                    },
+                    complete: function () {
+                        flag = 0;
+                        heat_flag = false;
+                        $(".loading-column").remove();
+                    }
+                });
+                return;
+            }
+
+            // 负责用水
+            if (reduce_water_flag === true) {
+                let w = $("#cur-water").val();
+                if (w == "--" || parseInt(w) < 3) {
+                    $("#reduce-water-btn").removeClass("btn-secondary");
+                    $("#reduce-water-btn").addClass("btn-success");
+                    $("#reduce-water-btn").text("启动");
+                    $("#auto-water").attr({
+                        "fill": "#777"
+                    });
+                    reduce_water_status = false;
+                    $(".loading-column").remove();
+                    alert_log("用水失败, 水量不足")
+                    reduce_water_flag = false;
+                    flag = 0;
+                    return;
+                }
+                if (reduce_water_status == false) {
+                    $("#reduce-water-btn").removeClass("btn-secondary");
+                    $("#reduce-water-btn").addClass("btn-success");
+                    $("#reduce-water-btn").text("启动");
+                    reduce_water_status = false;
+                    $(".loading-column").remove();
+                    reduce_water_flag = false;
+                    flag = 0;
+                    return;
+                }
+                cur_ajax = $.ajax({
+                    url: '{% url 'hot:reduce_water' %}',
+                    type: 'GET',
+                    dataType: "text",//预期服务器返回的数据类型
+                    data: '',
+                    processData: false,
+                    content_type: false,
+
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+
+                    success: function (data) {
+                        console.log(data);
+                        if (data == 'success') {
+                            reduce_water += 3;
+                            $("#reduce-water").val(reduce_water);
+                            get_info();
+                            if (reduce_water_status == true) {
+                                $("#reduce-water-btn").addClass("btn-secondary");
+                                $("#reduce-water-btn").removeClass("btn-success");
+                                $("#reduce-water-btn").text("关闭");
+                            } else {
+                                $("#reduce-water-btn").removeClass("btn-secondary");
+                                $("#reduce-water-btn").addClass("btn-success");
+                                $("#reduce-water-btn").text("启动");
+                            }
+
+                        } else {
+                            $("#reduce-water-btn").removeClass("btn-secondary");
+                            $("#reduce-water-btn").addClass("btn-success");
+                            $("#reduce-water-btn").text("启动");
+                            reduce_water_status = false;
+                            reduce_water_flag = false;
+                            alert_log("用水失败, 与硬件丢失联系");
+                        }
+
+                    },
+
+                    error: function () {
+                        $("#reduce-water-btn").removeClass("btn-secondary");
+                        $("#reduce-water-btn").addClass("btn-success");
+                        $("#reduce-water-btn").text("启动");
+                        reduce_water_status = false;
+                        reduce_water_flag = false;
+                        alert_log("用水失败, 服务器错误")
+                    },
+                    complete: function () {
+                        flag = 0;
+                        $(".loading-column").remove();
+                    }
+                });
+                return;
+            }
+
+            // 负责设备电源开关
+            if (power_flag === true) {
+                $.ajax({
+                    url: '{% url 'hot:power' %}',
+                    type: 'GET',
+                    dataType: "text",//预期服务器返回的数据类型
+                    data: {
+                        "power_status": power_status
+                    },
+                    processData: true,
+                    content_type: false,
+
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+
+                    success: function (data) {
+                        console.log(data);
+                        if (data === 'off') {
+                            $("#cur-water").val("--");
+                            $("#tempe").val("--");
+                            $("#reduce-water").val("--");
+                            $("rect").attr({
+                                "fill": '#777'
+                            });
+                            $(".on-btn").attr("disabled", "disabled")
+
+                            $("#power-btn").addClass("btn-success");
+                            $("#power-btn").removeClass("btn-danger");
+                            $("#power-btn").text("开启");
+
+                        } else if (data === 'on') {
+                            $("#power-light").attr({
+                                'fill': '#edfc08'
+                            });
+                            $("#power-btn").removeClass("btn-success");
+                            $("#power-btn").addClass("btn-danger");
+                            $("#power-btn").text("关闭");
+                            $(".on-btn").removeAttr("disabled")
+
+                        } else {
+                            power_status = false;
+                            alert_log("启动失败, 与硬件失去联系")
+                        }
+                    },
+
+                    error: function () {
+                        power_status = false;
+                        alert_log("与服务器丢失连接")
+                    },
+                    complete: function () {
+                        flag = 0;
+                        power_flag = false;
+                        $(".loading-column").remove();
+                    }
+                });
+                return;
+            }
+
+            // 获取信息
+            get_info();
+        }
+    }
+
+    // 添加loading图标
+    function addLoaingIcon(parent) {
+        var column = $("<div class=\"loading-column\"></div>");
+        var animation = $("<div class=\"loading-container animation-4\"></div>");
+        animation.append($("<div class=\"shape shape1\"></div>"));
+        animation.append($("<div class=\"shape shape2\"></div>"));
+        animation.append($("<div class=\"shape shape3\"></div>"));
+        animation.append($("<div class=\"shape shape4\"></div>"));
+        column.append(animation);
+        parent.prepend(column);
+    }
+
+    // 输出错误日志
+    function alert_log(message) {
+        let cur_date = new Date().toLocaleString();     // 当前时间, 用来记录日志
+        $("#message").prepend(cur_date + ": " + message + "\n");
+    }
+
+</script>
+
+
+<script>
+    // 监控数据
+    var dom = document.getElementById("mychart");
+    var myChart = echarts.init(dom);
+    option = null;
+
+    function randomData() {
+        now = new Date(+now + oneDay);
+        return {
+            name: now.toString(),
+            value: [
+                now,
+                0
+            ]
+        }
+    }
+
+    let t_dic = randomData();
+    let w_dic = randomData();
+
+    let t_data = [];
+    let w_data = [];
+    var now = +new Date();
+    var oneDay = 5000;
+    for (let i = 0; i < 20; i++) {
+        t_data.push(randomData());
+        w_data.push(randomData());
+    }
+
+    option = {
+        title: {
+            text: '温度与水位变化曲线'
+        },
+        legend: {
+            data: ['温度', '水位']
+        },
+        dataZoom: [
+            /*
+            {
+                type: 'slider',
+                xAxisIndex: 0,
+                start: 0,
+                end: 100
+            },
+            {
+                type: 'inside',
+                xAxisIndex: 0,
+                start: 0,
+                end: 100
+            },
+
+             */
+            {
+                type: 'slider',
+                yAxisIndex: 0,
+                start: 0,
+                end: 100
+            },
+            {
+                type: 'inside',
+                yAxisIndex: 0,
+                start: 0,
+                end: 100
+            }
+        ],
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                animation: false,
+                type: 'cross'
+            }
+        },
+        xAxis: {
+            type: 'time',
+            name: '时间',
+            splitLine: {
+                show: false
+            }
+        },
+        yAxis: {
+            min: 0,
+            max: 120,
+            //interval: 5,
+            type: 'value',
+            name: '温度与水位',
+            //boundaryGap: 10,
+            splitLine: {
+                show: false
+            }
+        },
+        series: [{
+            name: '温度',
+            type: 'line',
+            data: t_data
+        }, {
+            name: '水位',
+            type: 'line',
+            data: w_data
+        }]
+    };
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+    function set_chart(t, w) {
+        now = new Date(+now + oneDay);
+        t_dic = {
+            name: now.toString(),
+            value: [
+                now,
+                t
+            ]
+        };
+        w_dic = {
+            name: now.toString(),
+            value: [
+                now,
+                w
+            ]
+        };
+        t_data.push(t_dic);
+        w_data.push(w_dic)
+        t_data.shift();
+        w_data.shift();
+        myChart.setOption({
+            series: [{
+                data: t_data
+            }, {
+                data: w_data
+            },
+            ]
+        });
+    }
+</script>
+</body>
+</html>

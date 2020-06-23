@@ -1,0 +1,201 @@
+
+.loading-column {
+    box-sizing: border-box;
+}
+
+.loading-column {
+    position: relative;
+    z-index: 10000;
+    top: 0px;
+    width: 99%;
+    height: 98%;
+    margin: 5px;
+    /*background: rgba(255, 255, 255, 0.3);*/
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-container {
+    width: 50px;
+    height: 50px;
+    position: relative;
+}
+
+.loading-container.animation-4 {
+    -webkit-transform: rotate(10deg);
+    transform: rotate(10deg);
+}
+
+.loading-container.animation-4 .shape {
+    border-radius: 15px;
+}
+
+.loading-container.animation-4 {
+    -webkit-animation: rotation 1s infinite;
+    animation: rotation 1s infinite;
+}
+
+.loading-container.animation-4, .loading-container.animation-5 {
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.loading-container .shape {
+    position: absolute;
+    width: 35%;
+    height: 35%;
+    border-radius: 1px;
+}
+
+.loading-container .shape.shape1 {
+    left: 0;
+    background-color: #5C6BC0;
+}
+
+.loading-container .shape.shape2 {
+    right: 0;
+    background-color: #8BC34A;
+}
+
+.loading-container .shape.shape3 {
+    bottom: 0;
+    background-color: #FFB74D;
+}
+
+.loading-container .shape.shape4 {
+    bottom: 0;
+    right: 0;
+    background-color: #F44336;
+}
+
+@-webkit-keyframes rotation {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotation {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.animation-4 .shape1 {
+    -webkit-animation: animation4shape1 0.3s ease 0s infinite alternate;
+    animation: animation4shape1 0.3s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes animation4shape1 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(5px, 5px);
+        transform: translate(5px, 5px);
+    }
+}
+
+@keyframes animation4shape1 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(5px, 5px);
+        transform: translate(5px, 5px);
+    }
+}
+
+.animation-4 .shape2 {
+    -webkit-animation: animation4shape2 0.3s ease 0.3s infinite alternate;
+    animation: animation4shape2 0.3s ease 0.3s infinite alternate;
+}
+
+@-webkit-keyframes animation4shape2 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(-5px, 5px);
+        transform: translate(-5px, 5px);
+    }
+}
+
+@keyframes animation4shape2 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(-5px, 5px);
+        transform: translate(-5px, 5px);
+    }
+}
+
+.animation-4 .shape3 {
+    -webkit-animation: animation4shape3 0.3s ease 0.3s infinite alternate;
+    animation: animation4shape3 0.3s ease 0.3s infinite alternate;
+}
+
+@-webkit-keyframes animation4shape3 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(5px, -5px);
+        transform: translate(5px, -5px);
+    }
+}
+
+@keyframes animation4shape3 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(5px, -5px);
+        transform: translate(5px, -5px);
+    }
+}
+
+.animation-4 .shape4 {
+    -webkit-animation: animation4shape4 0.3s ease 0s infinite alternate;
+    animation: animation4shape4 0.3s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes animation4shape4 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(-5px, -5px);
+        transform: translate(-5px, -5px);
+    }
+}
+
+@keyframes animation4shape4 {
+    from {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+    to {
+        -webkit-transform: translate(-5px, -5px);
+        transform: translate(-5px, -5px);
+    }
+}
